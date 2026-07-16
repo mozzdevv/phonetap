@@ -1,0 +1,264 @@
+# Social media app features brainstorm
+
+Thu, 16 Jul 26
+
+### Product Vision
+
+- Real-life-first social network: all connections require physical, face-to-face presence
+  - Antithesis of follower-farming: no one can grow a network without actually meeting people
+  - Tagline direction: “the social media where you actually have to be social”
+  - App name TBD; strong preference for a verb-form name (like “Google it” or “tap in”)
+    - Working title: “Tap In”
+    - Prior art to check: Friendster (taken); name will emerge organically like Instagram’s did
+- Core thesis: digital social graphs should mirror real-world relationship density
+  - Instagram’s original identity (retro filters) drifted far from its current form; this app’s identity should be structurally enforced, not just cultural
+
+---
+
+### Social Graph Mechanics
+
+- Single relationship type: “friends” only
+  - No followers, no following, no asymmetric relationships
+  - One number on your profile: total friend count
+  - Mutual by definition: if A is friends with B, B is friends with A
+- Influencer model is fundamentally redefined
+  - Status comes from the size of your real-world network
+  - You cannot buy reach; you have to physically meet people
+- Friend count as social signal
+  - High friend count = genuinely well-connected person in real life
+  - No vanity metric inflation possible through follow-backs or purchased followers
+
+---
+
+### Connection Protocol
+
+- Primary mechanism: NFC tap
+  - Both users open the app, tap phones together, connection is established
+  - Rationale for NFC as primary:
+    - Near-universal hardware support across modern smartphones
+    - Requires genuine physical proximity (cannot be done remotely)
+    - Frictionless UX: no scanning, no typing, no searching
+  - Alternatives considered and deprioritized:
+    - QR code scanning: viable fallback, slightly more friction
+    - Bluetooth: possible but less precise proximity signal
+    - Decision: NFC is the best current option; revisit if superior technology emerges
+- Connection is instantaneous and bilateral
+  - No “request and accept” flow: tap = connected
+  - Both users see the new friend appear in their list immediately
+
+---
+
+### Privacy Model and Profile Visibility
+
+- All profiles are private by default, with no opt-out to public
+  - A profile is only visible to confirmed mutual friends
+  - Non-friends see nothing: no posts, no bio, no friend count
+  - This is not a “privacy setting”; it is the architecture of the platform
+- Comparison to Instagram private profiles:
+  - Instagram private = you choose to restrict; public is the default
+  - This app: private is the only mode; there is no public mode
+  - Implication: no lurking, no discovery through browsing, no algorithmic surfacing of strangers
+- Discovery is entirely IRL
+  - You cannot find someone by searching their name
+  - The only path to connection is physical presence and NFC tap
+
+---
+
+### Unfriend Flow and Notification Design
+
+- Unfriending is unilateral: one person removes the other, connection is severed for both
+  - The removed person loses the friend from their list automatically
+- Notification on unfriend: confirmed feature, but wording is an open design question
+  - Option A (named): “Scotty unfriended you”
+    - Transparent but high potential for conflict, especially among younger users
+  - Option B (anonymous): “You lost a friend”
+    - Softer; user must check their own list to identify who it was
+    - Preferred direction in discussion
+  - Open question: at high friend counts (40+), anonymous notification is effectively undetectable
+    - Most people actively track ~15 close contacts; beyond that, churn goes unnoticed
+  - Recommendation: A/B test both variants; monitor downstream behavior (blocks, reports, churn)
+  - Risk flag: named unfriend notifications could generate conflict, especially in teen/high school demographics
+
+---
+
+### Friend List Structure and Ranking Logic
+
+- Friend list is split into two tabs:
+  - Tab 1: New Tap-Ins
+    - Chronologically ordered by most recent first tap
+    - Shows people you have connected with for the first time recently
+    - Surfaces new relationships before they get buried
+  - Tab 2: Top 10 (working name)
+    - Ranked by frequency of tap-ins over time
+    - The 10 people you have physically met and tapped with most often
+    - Functions as a “closest friends” signal derived from behavior, not self-selection
+    - Analogous to Snapchat’s Best Friends / streak mechanic, but grounded in physical meetings
+- Recency vs. frequency as dual signals
+  - New Tap-Ins = recency signal (who have I just met?)
+  - Top 10 = frequency signal (who do I actually spend time with?)
+  - Together they give a full picture of both new and established relationships
+
+---
+
+### Time-Based Re-Engagement Nudges
+
+- Problem being solved: connections made at conferences, travel, or one-off events get buried and forgotten
+- Mechanic: app monitors time elapsed since last tap-in with each friend
+  - If a threshold is crossed (e.g. several months), app sends a nudge: “You haven’t tapped in with [Name] in a while”
+  - Nudge encourages physical meetup and re-tap to “renew” the friendship
+- Re-tap as friendship renewal signal
+  - Each tap-in refreshes the relationship’s recency score
+  - Frequent re-tappers rise in the Top 10; dormant connections fall
+- No forced unfriending for inactivity
+  - Nudge is a prompt, not a penalty
+  - Rationale: overseas friends or long-distance relationships are still valid; the app should not auto-remove them
+  - Open question: should there be an optional “friendship expiry” setting for users who want a more curated list?
+- Gamification angle
+  - Re-engagement nudges create a loop: meet → tap → drift → nudge → meet again
+  - Reinforces the core value proposition of getting people out and about
+
+---
+
+### Opt-In City-Level Co-Location Notifications
+
+- Feature: when two mutual friends are in the same city at the same time, both receive a nudge
+  - “Maz is in Toronto. You should tap in.”
+  - Requires both users to have location sharing opted in
+- Granularity: city-level only, not neighborhood or street-level
+  - Protects privacy: you know someone is in your city, not their exact location
+  - Reduces stalking/safety risk vs. precise location sharing
+- Opt-in architecture:
+  - Both users must independently opt in for the nudge to trigger
+  - If either user has location off, no notification is sent to either party
+- Real-world use case that motivated this feature:
+  - Two childhood friends both spent New Year’s in Paris simultaneously
+  - Neither knew the other was there; discovered it a week later on a phone call
+  - One friend was not on Instagram and missed the posts; this app would have caught it
+- Business and professional use case:
+  - Met someone at a conference, exchanged taps, forgot about them
+  - Six months later, both at the same city for different reasons
+  - App surfaces the overlap: “You should reconnect”
+- Open question: should the nudge include a suggested venue or activity, or just the alert?
+
+---
+
+### Business Profile Mechanics
+
+- Businesses join as a distinct profile type
+  - Physical NFC sticker or tappable device installed at the business location
+  - The only way to follow a business is to physically visit and tap in
+  - No remote follows, no “like our page” equivalent
+- Implications for the business:
+  - Follower list = verified visitor list
+  - Every follower has been physically present at least once
+  - Businesses can see:
+    - Total unique visitors (tapped at least once)
+    - Regulars: users who have tapped in multiple times
+    - Frequency distribution: how often each follower visits
+  - This data is structurally unavailable on any current social platform
+- Content model for businesses:
+  - Posts are only visible to people who have tapped in (i.e. verified visitors)
+  - Encourages humanized, staff-led content rather than polished brand assets
+    - Example: “Steve from La Carnita” posting day-in-the-life content vs. a restaurant’s generic promo photo
+  - Businesses cannot reach non-visitors organically; content is inherently targeted
+- Promotions and messaging use cases:
+  - Tap-in discount: “20% off if you tap in today” — only visible to existing followers (verified visitors)
+  - Secret menu or exclusive offer via DM: sent only to followers, e.g. “Tuesday happy hour secret menu, this month only”
+  - Re-engagement promo: nudge lapsed visitors with a time-limited offer
+  - All promotions are high-signal by design: recipient has already been to the venue
+- Regulars tracking as CRM replacement:
+  - Traditional social media: thousands of followers, no way to distinguish regulars from one-time visitors
+  - This app: tap frequency per user = visit frequency data
+  - Businesses can identify their top 10% most loyal customers without any additional tooling
+  - Future feature: loyalty tier system based on tap count (e.g. bronze/silver/gold regular)
+
+---
+
+### Gamification Concepts
+
+- Top 10 friend list as social status signal
+  - Being in someone’s Top 10 means you physically hang out with them most
+  - Visible to both parties; creates positive reinforcement for real-world meetups
+- Re-tap streaks (implicit)
+  - Frequent mutual tap-ins strengthen the relationship score
+  - Analogous to Snapchat streaks but requires physical presence
+- Business tap count as loyalty signal
+  - Customers can see their own visit history to a business
+  - Potential: visible badge or tier on their profile for that business (“Regular at La Carnita”)
+- Concert/event scenario:
+  - Fans of an artist could be connected through shared Spotify listening data (see Integrations)
+  - At a concert, tap-in with other fans to build a niche sub-network of people with shared taste
+  - Artist or venue could run promos targeting only fans who are both in the app and at the event
+
+---
+
+### Potential Integrations
+
+- Spotify integration (Phase 2+):
+  - Pull user’s top artists over last 3 or 6 months
+  - Use listening data to surface shared interests between friends or potential connections
+  - Example: both you and a new tap-in are in the top 1% of Weeknd listeners
+  - Opens a new metric layer for artists/labels: “5,000 verified Weeknd fans in this niche app, all physically active”
+  - Artist teams could use this for targeted promotions, presale access, or merch discounts
+  - Tradeoff: requires Spotify OAuth and user consent; adds complexity to onboarding
+
+---
+
+### Event, Concert, and Venue/White-Label Scenarios
+
+- Concert use case (The Weeknd example):
+  - Artist has a verified fan base in the app (Spotify-linked or self-declared)
+  - At the venue, fans tap in with each other, building a concert-specific sub-network
+  - Merch table: tap in to receive 10–20% discount as a verified fan
+  - Artist team gets conversion data: how many app users attended, how many bought merch
+  - Pay-tier model for artists: guaranteed reach to X verified fans in exchange for platform fee
+- NFC wristband integration at events:
+  - Precedent: The Weeknd’s ACC Toronto concert (sold out, ~20,000 attendees) used NFC/LED wristbands
+    - Wristbands lit up in coordinated colors during the show, visible across the arena
+    - Controlled via backend timing system; costly to implement at scale
+  - Opportunity: if a venue already issues NFC wristbands (e.g. for access control or experience), white-label the tap-in functionality into that wristband
+  - Users tap wristbands together instead of phones; same connection mechanic, different hardware
+- Activate venue white-label scenario:
+  - Activate is a dark, dimly-lit entertainment venue with multiple activity rooms (hoops, grid, etc.)
+  - Already issues NFC wristbands to guests for score tracking on in-venue screens
+  - Problem: guests arrive with their own group but have no way to meet other regulars with compatible schedules
+  - White-label opportunity:
+    - Activate’s existing NFC wristband doubles as a tap-in device
+    - Guests can connect with other Activate regulars they meet in-venue
+    - Post-visit: find other regulars who want to go back, coordinate group visits
+  - Functionality is already partially built into Activate’s hardware; integration is a partnership play
+  - Open question: revenue share model with Activate vs. licensing fee vs. co-marketing
+
+---
+
+### Monetization Options Discussed
+
+- Not a current priority; focus is on product-market fit and core functionality first
+- Options discussed:
+  - Free for individual users; businesses pay to maintain a profile
+  - Even at $5/year, 1M businesses = $5M ARR (noted as a floor, not a ceiling)
+  - Consensus: can charge significantly more given the verified-visitor data value
+- Open question: which model to pursue first, and at what scale threshold does each become viable?
+
+---
+
+### Next Steps and Open Questions
+
+- Immediate priorities:
+  - Enable and fully test chat functionality (identified as a core, non-negotiable feature)
+  - Test NFC tap connection flow across a range of Android and iOS devices
+  - Gather early user feedback on core loop: tap → friend → post → reconnect
+- Design decisions to resolve:
+  - Unfriend notification wording: A/B test anonymous vs. named variants
+  - Friend list tab naming: “New Tap-Ins” and “Top 10” are working names
+  - Location nudge opt-in UX: how to present the city-level sharing prompt without alarming users
+- Open product questions:
+  - Should there be an optional friendship expiry/inactivity threshold?
+  - How to handle users who meet abroad and will never realistically re-tap (valid friendship vs. dead weight)?
+  - At what friend count does the anonymous unfriend notification become effectively meaningless?
+  - Should the Top 10 be visible to others or only to the user themselves?
+- Later-phase work:
+  - Spotify integration design and OAuth flow
+  - Business profile onboarding and NFC sticker provisioning
+  - White-label partnership framework (Activate and similar venues)
+  - Monetization model selection and pricing research
