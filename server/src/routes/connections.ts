@@ -1,13 +1,15 @@
-import { Router } from 'express';
+import { Router, Response } from 'express';
 import { getDb } from '../models/database';
-import { authenticate } from '../middleware/auth';
+import { requireAuth, AuthenticatedRequest } from '../middleware/auth';
 import { clients } from '../index';
 
 const router = Router();
 
-router.post('/add', authenticate, (req: any, res) => {
+router.post('/add', requireAuth as any, (req: AuthenticatedRequest, res: Response) => {
   const { targetPublicKey } = req.body;
-  const userKey = req.user.signPublicKey;
+  const userKey = req.userPublicKey;
+
+  if (!userKey) return res.status(401).json({ error: 'Unauthorized' });
 
   try {
     const db = getDb();
@@ -27,9 +29,11 @@ router.post('/add', authenticate, (req: any, res) => {
   }
 });
 
-router.post('/remove', authenticate, (req: any, res) => {
+router.post('/remove', requireAuth as any, (req: AuthenticatedRequest, res: Response) => {
   const { targetPublicKey } = req.body;
-  const userKey = req.user.signPublicKey;
+  const userKey = req.userPublicKey;
+
+  if (!userKey) return res.status(401).json({ error: 'Unauthorized' });
 
   try {
     const db = getDb();
